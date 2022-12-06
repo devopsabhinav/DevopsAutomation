@@ -1,6 +1,6 @@
 ## Changes to be made in Loki Helm Charts according project's
 
-`values.yaml`
+`Loki Main values.yaml`
 
 ```console
 nodeSelector:
@@ -23,7 +23,7 @@ tableManager:
 
 ## Changes to be made in kube-prometheus-stack Helm Charts according project's
 
-`Main Values.yaml `
+`kube-prometheus-stack Main Values.yaml `
 
 ```console
    additionalScrapeConfigs:
