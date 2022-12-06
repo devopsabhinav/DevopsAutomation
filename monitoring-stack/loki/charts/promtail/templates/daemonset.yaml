@@ -1,0 +1,286 @@
+{{- $fullname := include "generate.fullname" . -}}
+{{- $positionsDirectory := include "promtail.positionsDirectory" . -}}
+{{- $systemJournalDirectory := include "promtail.systemJournalDirectory" . -}}
+{{- $podsDirectory := include "promtail.podsDirectory" . -}}
+{{- $containersDirectory := .Values.pods.containersDirectory -}}
+{{- $auditLogDirectory := include "promtail.auditLogDirectory" . -}}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "generate.labels" . | nindent 4 }}
+    {{- with .Values.labels -}}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  name: {{ $fullname }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "generate.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        {{- include "generate.labels" . | nindent 8 }}
+        {{- with .Values.labels -}}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum | quote }}
+        {{- with .Values.podAnnotations -}}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      volumes:
+        - name: secrets
+          secret:
+            secretName: {{ $fullname }}
+        {{- if eq .Values.pods.cri "auto" }}
+        - name: autoconfig
+          emptyDir: {}
+        {{- end }}
+        - name: positions
+          hostPath:
+            path: {{ $positionsDirectory }}
+            type: DirectoryOrCreate
+        {{- if .Values.pods.scrape }}
+        - name: pods
+          hostPath:
+            path: {{ $podsDirectory }}
+            type: DirectoryOrCreate
+        {{- end }}
+        {{- if .Values.pods.scrape }}
+        - name: containers
+          hostPath:
+            path: {{ $containersDirectory }}
+            type: DirectoryOrCreate
+        {{- end }}
+        {{- if and .Values.systemJournal.scrape }}
+        - name: journal
+          hostPath:
+            path: {{ $systemJournalDirectory }}
+            type: DirectoryOrCreate
+        {{- end }}
+        {{- if and .Values.auditLog.scrape }}
+        - name: audit
+          hostPath:
+            path: {{ $auditLogDirectory }}
+            type: DirectoryOrCreate
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- end }}
+      {{- if or .Values.initContainers (eq .Values.pods.cri "auto") }}
+      initContainers:
+        {{- if eq .Values.pods.cri "auto" }}
+        - name: cri-autoconfig
+          image: {{ .Values.criAutoconfigImage }}
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          env:
+            - name: THIS_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: THIS_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: THIS_POD_UID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.uid
+            {{- if .Values.criAutoconfigDebug }}
+            - name: DEBUG
+              value: "1"
+            {{- end }}
+            - name: TEMPLATE_DIRECTORY
+              value: /etc/promtail-template
+            - name: OUTPUT_DIRECTORY
+              value: /etc/promtail
+            - name: PODS_DIRECTORY
+              value: {{ $podsDirectory }}
+            - name: CONTAINERS_DIRECTORY
+              value: {{ $containersDirectory }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 0
+            runAsUser: 0
+          volumeMounts:
+            - name: secrets
+              mountPath: /etc/promtail-template
+              readOnly: true
+            - name: autoconfig
+              mountPath: /etc/promtail
+            - name: pods
+              mountPath: {{ $podsDirectory }}
+              readOnly: true
+            - name: containers
+              mountPath: {{ $containersDirectory }}
+              readOnly: true
+        {{- end }}
+        {{- with .Values.initContainers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ include "generate.image" . }}
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          args:
+            - -config.file=/etc/promtail/promtail.yaml
+            - -client.external-labels=hostname=$(HOSTNAME)
+            {{- with .Values.extraArgs }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          env:
+            - name: HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            {{- with .Values.extraEnvVars }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.server.httpPort }}
+              protocol: TCP
+            - name: grpc
+              containerPort: {{ .Values.server.grpcPort }}
+              protocol: TCP
+            {{- if .Values.syslog.listen }}
+            - name: syslog
+              containerPort: {{ .Values.syslog.port }}
+              protocol: UDP
+            {{- end }}
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 15
+          {{- if or .Values.postStartHook .Values.preStopHook }}
+          lifecycle:
+            {{- with .Values.postStartHook }}
+            postStart:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- with .Values.preStopHook }}
+            preStop:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 0
+            runAsUser: 0
+          volumeMounts:
+            - name: positions
+              mountPath: {{ $positionsDirectory }}
+            {{- if eq .Values.pods.cri "auto" }}
+            - name: autoconfig
+              mountPath: /etc/promtail
+            {{- else }}
+            - name: secrets
+              mountPath: /etc/promtail
+            {{- end }}
+            {{- if .Values.pods.scrape }}
+            - name: pods
+              mountPath: {{ $podsDirectory }}
+              readOnly: true
+            {{- end }}
+            {{- if and .Values.pods.scrape (ne .Values.pods.cri "cri-o") }}
+            - name: containers
+              mountPath: {{ $containersDirectory }}
+              readOnly: true
+            {{- end }}
+            {{- if .Values.systemJournal.scrape }}
+            - name: journal
+              mountPath: {{ $systemJournalDirectory }}
+              readOnly: true
+            {{- end }}
+            {{- if .Values.auditLog.scrape }}
+            - name: audit
+              mountPath: {{ $auditLogDirectory }}
+              readOnly: true
+            {{- end }}
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        {{- with .Values.extraContainers }}
+        {{- toYaml . | nindent 10 }}
+        {{- end }}
+      {{- with .Values.ephemeralContainers }}
+      ephemeralContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "generate.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if ne (int .Values.priority) 0 }}
+      priority: {{ .Values.priority }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{- if .Values.runtimeClassName }}
+      runtimeClassName: {{ .Values.runtimeClassName }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- if .Values.dnsPolicy }}
+      dnsPolicy: {{ .Values.dnsPolicy }}
+      {{- end }}
+      {{- with .Values.dnsConfig }}
+      dnsConfig:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.hostAliases }}
+      hostAliases:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  {{- with .Values.updateStrategy }}
+  updateStrategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}

@@ -1,0 +1,42 @@
+{{- if and .Values.podSecurityPolicy.enabled .Values.podSecurityPolicy.create -}}
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  annotations:
+    {{- if .Values.podSecurityPolicy.annotations }}
+    {{-   toYaml .Values.podSecurityPolicy.annotations | nindent 4 }}
+    {{- else }}
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: runtime/default,docker/default
+    seccomp.security.alpha.kubernetes.io/defaultProfileName: runtime/default
+    {{- end }}
+  labels:
+    {{- include "generate.labels" . | nindent 4 }}
+  name: {{ include "generate.pspName" . }}
+spec:
+  privileged: false
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  requiredDropCapabilities:
+    - ALL
+  fsGroup:
+    rule: MustRunAs
+    ranges:
+      - min: 1
+        max: 65535
+  runAsUser:
+    rule: MustRunAsNonRoot
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: MustRunAs
+    ranges:
+      - min: 1
+        max: 65535
+  volumes:
+    - secret
+    - configMap
+    - emptyDir
+    - downwardAPI
+    - projected
+    - persistentVolumeClaim
+{{- end }}

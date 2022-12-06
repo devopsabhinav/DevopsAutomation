@@ -1,0 +1,9 @@
+dependencies:
+- name: generate
+  repository: https://charts.kube-ops.io
+  version: 0.2.3
+- name: promtail
+  repository: https://charts.kube-ops.io
+  version: 1.5.1
+digest: sha256:8431c713c260219d3bea8be2ae4f8ef7cd282810adb1ceedd930663417f3b3f7
+generated: "2021-04-16T00:51:14.175090823+03:00"

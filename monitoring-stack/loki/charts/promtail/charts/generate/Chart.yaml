@@ -1,0 +1,21 @@
+annotations:
+  artifacthub.io/links: |
+    - name: Chart Source
+      url: https://gitlab.com/kube-ops/helm/libs/generate
+apiVersion: v2
+appVersion: 0.2.3
+description: Helper library
+home: https://gitlab.com/kube-ops/helm/libs/generate
+icon: https://gitlab.com/kube-ops/helm/libs/generate/-/raw/master/resources/icon.png
+keywords:
+- library
+- names
+- labels
+maintainers:
+- email: anton.kulikov@protonmail.com
+  name: Anton Kulikov
+name: generate
+sources:
+- https://gitlab.com/kube-ops/helm/libs/generate
+type: library
+version: 0.2.3
