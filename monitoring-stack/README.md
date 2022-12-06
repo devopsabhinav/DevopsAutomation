@@ -54,13 +54,14 @@ persistence:
  type: pvc
  enabled: true
  
+
 env:
  GF_SMTP_ENABLED: "true"
  GF_SMTP_HOST: "smtp.gmail.com:587"
  GF_SMTP_USER: "support@yudiz.com"
  GF_SMTP_PASSWORD: "Yudiz@2022"
- 
 envValueFrom: {}
+
 
 datasources:
 datasources.yaml:
@@ -77,7 +78,8 @@ datasources.yaml:
     secureJsonData:
       accessKey: 'accesskey'
       secretKey: 'secretkey'
-      
+
+
 dashboardProviders:
 dashboardproviders.yaml:
   apiVersion: 1
@@ -90,6 +92,7 @@ dashboardproviders.yaml:
     editable: true
     options:
       path: /var/lib/grafana/dashboards/default
+
 
 dashboards:
  default:
