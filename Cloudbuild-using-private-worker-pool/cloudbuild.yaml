@@ -1,0 +1,46 @@
+steps:
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args: ['gcloud', 'config', 'set', 'project', '$project_id']
+    
+#   - id: kubectl-proxy
+#     name: gcr.io/cloud-builders/docker
+#     entrypoint: sh
+#     args:
+#     - -c
+#     - docker run -d --net cloudbuild --name kubectl-proxy
+#         gcr.io/cloud-builders/gcloud compute start-iap-tunnel
+#         bastion-instance 8080 --local-host-port 0.0.0.0:8080 --zone us-west1-b && sleep 5
+    
+  # Docker Build
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 
+           'registry/$project_id/$project_name/$app_name', 
+           '.']
+
+  # Docker Push
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 
+           'registry/$project_id/$project_name/$app_name']
+           
+#   - id: setup-k8s
+#     name: gcr.io/cloud-builders/kubectl
+#     entrypoint: sh
+#     args:
+#     - -c
+#     - HTTPS_PROXY=socks5://kubectl-proxy:8080 kubectl apply -f config.yml
+           
+  # deploy container image to GKE
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+    - run
+    - export CLOUDSDK_CONTAINER_USE_CLIENT_CERTIFICATE=True
+    - --filename=deployment_file
+    - --image=$registry/$project_id/$project_name/$app_name
+    - --location=region
+    - --cluster=cluster_name
+    - --namespace=namespace
+
+options:
+  pool:
+    name: pool_path
