@@ -20,3 +20,5 @@ tableManager:
   retentionDeletesEnabled: true
   retentionPeriod: 6d
 ```
+
+## Changes to be made in KPS Helm Charts according project's
