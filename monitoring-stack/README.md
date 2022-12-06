@@ -1,4 +1,4 @@
-## Changes made in Loki Helm Charts
+## Changes to be made in Loki Helm Charts according project's
 
 `values.yaml`
 
