@@ -1159,7 +1159,7 @@ tableManager:
   retentionDeletesEnabled: true
   # tableManager.retentionPeriod -- How far back tables will be kept before they are deleted. 0s disables deletion.
   # The retention period must be a multiple of the index / chunks table "period" (see periodConfig).
-  retentionPeriod: 6d
+  retentionPeriod: 7d
   # tableManager.throughputUpdatesDisabled -- Master 'off-switch' for table capacity updates, e.g. when troubleshooting.
   throughputUpdatesDisabled: false
   # tableManager.pollInterval -- Period with which the table manager will poll for tables.
