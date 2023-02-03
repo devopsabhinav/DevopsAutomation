@@ -1156,10 +1156,10 @@ chunkStoreConfig:
 # tableManager -- Configures the table manager for retention
 tableManager:
   # tableManager.retentionDeletesEnabled -- Master 'on-switch' for table retention deletions.
-  retentionDeletesEnabled: false
+  retentionDeletesEnabled: true
   # tableManager.retentionPeriod -- How far back tables will be kept before they are deleted. 0s disables deletion.
   # The retention period must be a multiple of the index / chunks table "period" (see periodConfig).
-  retentionPeriod: 0s
+  retentionPeriod: 6d
   # tableManager.throughputUpdatesDisabled -- Master 'off-switch' for table capacity updates, e.g. when troubleshooting.
   throughputUpdatesDisabled: false
   # tableManager.pollInterval -- Period with which the table manager will poll for tables.
@@ -1859,7 +1859,7 @@ persistence:
   ##
   enabled: true
   storageClassName: ""
-  size: 8Gi
+  size: 10Gi
   accessModes: [ ReadWriteOnce ]
   volumeMode: Filesystem
 
@@ -2005,7 +2005,7 @@ extraEnvVars: []
 
 ## See: https://gitlab.com/kube-ops/helm/apps/promtail/-/blob/master/values.yaml
 promtail:
-  enabled: false
+  enabled: true
 
   lokiUrl: http://loki/loki/api/v1/push
 
