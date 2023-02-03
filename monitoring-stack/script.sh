@@ -9,8 +9,8 @@ read -p "kps Release_Name: " kps_name
 
 # Install Loki
 
-helm upgrade --install $loki_name loki -n monitoring
+helm upgrade --install $loki_name loki -n $namespace
 
 # Install kube-prometheus-stack
 
-helm upgrade --install $kps_name kube-prometheus-stack -n monitoring
+helm upgrade --install $kps_name kube-prometheus-stack -n $namespace
