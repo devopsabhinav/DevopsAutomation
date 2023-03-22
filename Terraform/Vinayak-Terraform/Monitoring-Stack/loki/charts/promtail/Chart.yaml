@@ -1,0 +1,27 @@
+annotations:
+  artifacthub.io/links: |
+    - name: Chart Source
+      url: https://gitlab.com/kube-ops/helm/apps/promtail
+  category: LogManagement
+apiVersion: v2
+appVersion: 2.2.1
+dependencies:
+- name: generate
+  repository: https://charts.kube-ops.io
+  version: ~0.2.2
+description: Responsible for gathering logs and sending them to Loki
+home: https://grafana.com/docs/loki/latest/clients/promtail/
+icon: https://raw.githubusercontent.com/grafana/loki/master/docs/sources/logo.png
+keywords:
+- grafana
+- loki
+- promtail
+- logs
+maintainers:
+- email: anton.kulikov@protonmail.com
+  name: Anton Kulikov
+name: promtail
+sources:
+- https://github.com/grafana/loki
+- https://gitlab.com/kube-ops/helm/apps/promtail
+version: 1.5.1

@@ -1,0 +1,20 @@
+{{- if and .Values.server .Values.server.httpListenPort -}}
+{{- $fullname := include "generate.fullname" . -}}
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    helm.sh/hook: test-success
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+  labels:
+    {{- include "generate.labels" . | nindent 4 }}
+  name: {{ printf "%s-test-connection" $fullname | trunc 63 | trimSuffix "-" }}
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:
+        - {{ printf "http://%s:%s/ready" $fullname (toString .Values.service.port) | quote }}
+  restartPolicy: Never
+{{- end -}}

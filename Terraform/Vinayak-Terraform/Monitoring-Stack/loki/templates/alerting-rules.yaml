@@ -1,0 +1,10 @@
+{{- if .Values.alertingGroups }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "generate.labels" . | nindent 4 }}
+  name: {{ include "generate.fullname" . | printf "%s-alerting" }}
+data:
+  groups.yaml: {{ include "loki.alertingGroups" . | quote }}
+{{- end -}}

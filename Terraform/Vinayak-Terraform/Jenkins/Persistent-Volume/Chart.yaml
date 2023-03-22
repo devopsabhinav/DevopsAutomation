@@ -1,0 +1,8 @@
+apiVersion: v2
+name: Persistent Volume
+description: A Helm chart for Kubernetes Jenkins Persistent Volume
+
+type: application
+version: 0.0.1
+
+appVersion: "1.16.0"

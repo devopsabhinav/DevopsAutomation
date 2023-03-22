@@ -1,0 +1,54 @@
+{{- if and .Values.podSecurityPolicy.enabled .Values.podSecurityPolicy.create -}}
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  annotations:
+    {{- if .Values.podSecurityPolicy.annotations }}
+    {{- toYaml .Values.podSecurityPolicy.annotations | nindent 4 }}
+    {{- else }}
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: runtime/default,docker/default
+    seccomp.security.alpha.kubernetes.io/defaultProfileName: runtime/default
+    {{- end }}
+  labels:
+    {{- include "generate.labels" . | nindent 4 }}
+  name: {{ include "generate.pspName" . }}
+spec:
+  privileged: false
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  requiredDropCapabilities:
+    - ALL
+  fsGroup:
+    rule: RunAsAny
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  volumes:
+    - secret
+    - configMap
+    - emptyDir
+    - downwardAPI
+    - projected
+    - hostPath
+    - persistentVolumeClaim
+  allowedHostPaths:
+    - pathPrefix: {{ include "promtail.positionsDirectory" . }}
+      readOnly: false
+    {{- if .Values.pods.scrape }}
+    - pathPrefix: {{ include "promtail.podsDirectory" . }}
+      readOnly: true
+    - pathPrefix: {{ .Values.pods.containersDirectory }}
+      readOnly: true
+    {{- end }}
+    {{- if .Values.systemJournal.scrape }}
+    - pathPrefix: {{ include "promtail.systemJournalDirectory" . }}
+      readOnly: true
+    {{- end }}
+    {{- if .Values.auditLog.scrape }}
+    - pathPrefix: {{ include "promtail.auditLogDirectory" . }}
+      readOnly: true
+    {{- end }}
+{{- end }}

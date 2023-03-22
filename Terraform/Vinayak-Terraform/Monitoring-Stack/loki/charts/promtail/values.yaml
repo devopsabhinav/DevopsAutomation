@@ -1,0 +1,631 @@
+# Default values.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- Overrides the chart name
+nameOverride: ""
+# -- Overrides the full name
+fullnameOverride: ""
+
+#
+# -------------------------------------------------------------------------------------------------------------------------------------------- Global
+#
+
+## Global settings used by this chart and subcharts
+## ref: https://kubernetes.io/docs/concepts/containers/images/#updating-images
+global:
+  # -- Image download policy
+  imagePullPolicy: IfNotPresent
+  # imagePullPolicy: Always
+
+  # -- List of the Docker registry credentials
+  imagePullSecrets: []
+  # imagePullSecrets:
+  #   - name: some-registry-credentials
+  #   - name: other-registry-credentials
+
+#
+# -------------------------------------------------------------------------------------------------------------------------------------------- Config
+#
+
+# -- The URL where Loki is listening, denoted in Loki as http_listen_address and http_listen_port.
+# If Loki is running in microservices mode, this is the HTTP URL for the Distributor.
+# Path to the push API needs to be included.
+lokiUrl: http://loki/loki/api/v1/push
+
+# Pods logs scraping settings
+pods:
+  # -- Specifies whether a kubernetes pods logs should be collected
+  scrape: true
+
+  # --- Container runtime interface. Possible values are: `docker`, `cri-o` or `auto`
+  cri: auto
+
+  # -- Override default pods logs path
+  directory: /var/log/pods
+  containersDirectory: /var/lib/docker/containers
+
+  # -- All annotations with given prefix will be converted to labels.
+  # Example: log events from Pod annotated as `<prefix>/drop: "true"` will be labeled with `drop: true`
+  annotationPrefix: logging.kube-ops.io
+
+  # -- All labels with this names will be dropped
+  dropLabels:
+    - controller-uid
+    - controller-revision-hash
+    - pod-template-hash
+    - pod-template-generation
+    - job-name
+    - statefulset.kubernetes.io/pod-name
+    - chart
+    - heritage
+    - app.kubernetes.io/managed-by
+    - helm.sh/chart
+    - addonmanager.kubernetes.io/mode
+    - io.cilium/app
+    - security.banzaicloud.io/mutate
+    - gcp-auth-skip-secret
+    - queue-pod-name
+
+  # --- Drop from pods labeled with `drop: "true"`.
+  # May be set as annotation: `<prefix>/drop: true`, see `annotationPrefix`.
+  dropLabel: true
+  dropReadinessProbes: true
+  dropDebug: true
+  dropDeprecated: true
+
+  # -- Exclude pods logs from given namespaces list
+  excludeNamespaces: []
+    # - kube-system
+    # - monitoring
+
+  # -- Override default pipeline stages
+  pipelineStages: []
+    # - docker: {}
+    # - match:
+    #     selector: '{app="myapp"} |= "some unneccessary data"'
+    #     stages:
+    #       - drop:
+    #           expression: '.*'
+
+  parseGolang: true
+  parseJava: true
+  parseLevels: true
+  parseNginxAccessLog: true
+  nginxOutputTemplate: >
+    {{ if ne .user "-" }}{{ .user }}@{{ end }}{{ .ip }}
+    {{ .method }} {{ .path }} {{ .size }}
+    {{ if .referer }}{{ .referer }} {{ end }}|
+    {{ .useragent }}
+
+  parseKnownApps: true
+
+  # -- Append custom pipeline stages
+  extraPipelineStages: []
+    # - match:
+    #     selector: '{app="myapp"}'
+    #     stages:
+    #       - regex:
+    #           expression: 'custom parse config'
+
+# Systemd journal scrape config
+systemJournal:
+  # -- Specifies whether a systemd journal events should be collected
+  scrape: false
+
+  maxAge: 12h
+
+  # -- When true, log messages from the journal are passed through the pipeline as a JSON message with all of the journal entries' original fields.
+  # When false, the log message is the text content of the MESSAGE field from the journal entry.
+  json: false
+
+  # -- Override default journal path
+  directory: /var/log/journal
+
+  # -- Pipeline stages
+  pipelineStages: []
+
+# Audit log scrape config
+auditLog:
+  # -- Specifies whether a audit log events should be collected
+  scrape: false
+  # -- Overrides default audit log path. Must be absolute path to log file or mask.
+  # Example: /var/log/audit/*.log
+  path: /var/log/audit/audit.log
+  # -- Pipeline stages
+  pipelineStages: []
+  # -- Job label
+
+# Syslog settings
+syslog:
+  listen: false
+  port: 1514
+  labels: {}
+  pipelineStages: []
+# -- The tenant ID used by default to push logs to Loki.
+# If omitted or empty it assumes Loki is running in single-tenant mode and no X-Scope-OrgID header is sent.
+tenantId: ""
+
+# -- Log only messages with the given severity or above. Supported values [debug, info, warn, error]
+logLevel: error
+
+client:
+  # -- Maximum amount of time to wait before sending a batch, even if that batch isn't full.
+  batchwait: 3s
+  # -- Maximum batch size (in bytes) of logs to accumulate before sending the batch to Loki.
+  batchsize: 102400
+
+  basicAuth:
+    # -- The username to use for basic auth
+    username: ""
+    # -- The password to use for basic auth
+    password: ""
+    # -- The file containing the password for basic auth
+    passwordFile: ""
+
+  # -- Bearer token to send to the server.
+  bearerToken: ""
+  # -- File containing bearer token to send to the server.
+  bearerTokenFile: ""
+  # -- HTTP proxy server to use to connect to the server.
+  proxyUrl: ""
+
+  # -- If true, ignores the server certificate being signed by an unknown CA.
+  insecureSkipVerify: false
+
+  # If connecting to a TLS server, configures how the TLS authentication handshake will operate.
+  tls:
+    # -- The CA file to use to verify the server
+    caFile: ""
+    # -- The cert file to send to the server for client auth
+    certFile: ""
+    # -- The key file to send to the server for client auth
+    keyFile: ""
+    # -- Validates that the server name in the server's certificate is this value.
+    serverName: ""
+
+  # Default backoff schedule:
+  # 0.5s, 1s, 2s, 4s, 8s, 16s, 32s, 64s, 128s, 256s(4.267m)
+  # For a total time of 511.5s(8.5m) before logs are lost
+  backoffConfig:
+    # -- Initial backoff time between retries
+    minPeriod: 500ms
+    # -- Maximum backoff time between retries
+    maxPeriod: 5m
+    # -- Maximum number of retries when sending batches, 0 means infinite retries
+    maxRetries: 10
+
+  # -- Maximum time to wait for server to respond to a request
+  timeout: 10s
+
+server:
+  # -- HTTP server listen host
+  httpPort: 3101
+  # -- gRPC server listen host
+  grpcListenAddress: 0.0.0.0
+  # -- gRPC server listen port
+  grpcPort: 9095
+  # -- Timeout for graceful shutdowns
+  gracefulShutdownTimeout: 30s
+  # -- Read timeout for HTTP server
+  httpReadTimeout: 30s
+  # -- Write timeout for HTTP server
+  httpWriteTimeout: 30s
+  # -- Idle timeout for HTTP server
+  httpIdleTimeout: 120s
+  # -- Max gRPC message size that can be received
+  grpcMaxRecvMsgSize: 4194304
+  # -- Max gRPC message size that can be sent
+  grpcMaxSendMsgSize: 4194304
+  # -- Limit on the number of concurrent streams for gRPC calls (0 = unlimited)
+  grpcMaxConcurrentStreams: 100
+  # -- Base path to serve all API routes from (e.g., /v1/).
+  httpPathPrefix: ""
+  # -- Target managers check flag for promtail readiness, if set to false the check is ignored
+  healthCheckTarget: true
+
+positionsPath: /run/promtail/positions.yaml
+
+criAutoconfigImage: quay.io/kube-ops/promtail-cri-autoconfig:1.0.1
+criAutoconfigDebug: false
+
+#
+# --------------------------------------------------------------------------------------------------------------------------------------- Application
+#
+
+image:
+  # image.repository -- Overrides the image repository
+  repository: quay.io/kube-ops/promtail
+  # image.tag -- Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+podLabels: {}
+
+podAnnotations: {}
+  # logging.kube-ops.io/drop: "true"
+  # fluentbit.io/exclude: "true"
+  # prometheus.io/port: "8000"
+  # prometheus.io/scrape: "true"
+  # kubernetes.io/ingress-bandwidth: 10M
+  # kubernetes.io/egress-bandwidth: 10M
+  # seccomp.security.alpha.kubernetes.io/pod: runtime/default
+  # container.seccomp.security.alpha.kubernetes.io/chart-template: unconfined,docker/default,localhost/<path>
+  # security.alpha.kubernetes.io/sysctls: kernel.shm_rmid_forced=1
+  # security.alpha.kubernetes.io/unsafe-sysctls: net.ipv4.route.min_pmtu=1000,kernel.msgmax=1 2 3
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 64Mi
+  requests:
+    cpu: 25m
+    memory: 48Mi
+
+## DNS settings
+## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+dnsPolicy: ""
+# dnsPolicy: None
+# Custom pod DNS policy. Apply if `hostNetwork: true`
+# dnsPolicy: ClusterFirstWithHostNet
+
+dnsConfig: {}
+  # nameservers:
+  #   - 1.2.3.4
+  # searches:
+  #   - ns1.svc.cluster-domain.example
+  #   - my.dns.search.suffix
+  # options:
+  #   - name: ndots
+  #     value: "2"
+  #   - name: edns0
+
+## Adding entries to Pod /etc/hosts with HostAliases
+## ref: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+hostAliases: []
+  # - ip: "127.0.0.1"
+  #   hostnames:
+  #   - "foo.local"
+  #   - "bar.local"
+  # - ip: "10.1.2.3"
+  #   hostnames:
+  #   - "foo.remote"
+  #   - "bar.remote"
+
+# postStartHook -- This hook is executed immediately after a container is created.
+# However, there is no guarantee that the hook will execute before the container ENTRYPOINT.
+postStartHook: {}
+  # httpGet:
+  #   host: <podIP>
+  #   path: /
+  #   port: http
+  #   scheme: HTTP
+  #   httpHeaders:
+  #     - name: X-Header
+  #       value: myvalue
+
+# preStopHook -- This hook is called immediately before a container is terminated due to an API request or management event
+# such as liveness probe failure, preemption, resource contention and others.
+# ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks
+preStopHook: {}
+  # exec:
+  #   command:
+  #     - /bin/sh
+  #     - '-c'
+  #     - sleep 5 && kill -SIGTERM $(pidof vault)
+
+# --- Deployment
+
+labels: {}
+  # kubernetes.io/cluster-service: "true"
+  # kubernetes.io/name: "CoreDNS"
+
+annotations: {}
+
+# -- specifies the number of old ReplicaSets to retain to allow rollback
+# ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit
+revisionHistoryLimit: 10
+
+updateStrategy:
+  # -- Specifies the strategy used to replace old Pods by new ones
+  type: RollingUpdate
+  # updateStrategy.rollingUpdate.partition -- If a partition is specified, all Pods with an ordinal that is greater than or equal to the partition will be updated when the StatefulSet's .spec.template is updated (updateStrategy.type==RollingUpdate)
+
+# --- Scheduling and Eviction
+
+# schedulerName -- Overrides default scheduler
+schedulerName: ""
+
+# runtimeClassName -- Overrides default runtime class
+runtimeClassName: ""
+
+priority: 0
+
+# priorityClassName -- Overrides default priority class
+# ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+priorityClassName: ""
+# priorityClassName: system-cluster-critical
+
+# terminationGracePeriodSeconds -- Grace period before the Pod is allowed to be forcefully killed
+# ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
+terminationGracePeriodSeconds: 30
+
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+nodeSelector: {}
+
+## Tolerations for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+tolerations:
+  - operator: Exists
+    effect: NoSchedule
+    # key: node-role.kubernetes.io/master
+
+# affinity -- Affinity for pod assignment
+# ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}
+  # podAntiAffinity:
+  #   preferredDuringSchedulingIgnoredDuringExecution:
+  #     - weight: 1
+  #       podAffinityTerm:
+  #         labelSelector:
+  #           matchLabels:
+  #             app.kubernetes.io/name: chart-template
+  #             app.kubernetes.io/instance: release-name
+  #         topologyKey: kubernetes.io/hostname
+
+#
+# ------------------------------------------------------------------------------------------------------------------------------------------ Security
+#
+
+serviceAccount:
+  # serviceAccount.create -- Specifies whether a service account should be created
+  create: true
+
+  # serviceAccount.annotations -- Annotations to add to the service account
+  annotations: {}
+
+  # serviceAccount.labels -- Labels to add to the service account
+  labels: {}
+
+  # serviceAccount.name -- The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+rbac:
+  # rbac.create -- Specifies whether a cluster role should be created
+  create: true
+
+  annotations: {}
+
+  # rbac.name -- The name of the cluster role to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- Pod security settings
+podSecurityContext: {}
+  # runAsUser: 1042
+  # runAsGroup: 1042
+  # fsGroup: 1042
+  # fsGroupChangePolicy: OnRootMismatch
+  # sysctls:
+  #   - name: kernel.shm_rmid_forced
+  #     value: 1
+  #   - name: net.ipv4.route.min_pmtu
+  #     value: 1000
+  #     unsafe: true
+  # seccompProfile:
+  #   type: RuntimeDefault|Localhost|Unconfined
+  #   localhostProfile: my-profiles/profile-allow.json
+  # seLinuxOptions:
+  #   level: "s0:c123,c456"
+  # supplementalGroups:
+  #   - 1
+  # windowsOptions:
+  #   gmsaCredentialSpec: ""
+  #   gmsaCredentialSpecName: ""
+  #   runAsUserName: ""
+
+## Pod security policy
+podSecurityPolicy:
+  # -- Specifies whether a pod security policy should be enabled
+  enabled: true
+  # -- Pod security policy annotations
+  # @default -- Seccomp annotations
+  annotations: {}
+  # -- Specifies whether a pod security policy should be created
+  create: true
+  # -- The name of the pod security policy to use
+  # @default -- Generated using the fullname template
+  name: ""
+
+#
+# ------------------------------------------------------------------------------------------------------------------------------------------- Network
+#
+
+## HTTP service configuration
+service:
+  # -- HTTP port number
+  httpPort: 80
+  # -- HTTP node port number
+  httpNodePort: 30080
+
+  # -- gRPC port number
+  grpcPort: 9095
+  # -- gRPC node port number
+  grpcNodePort: 30095
+
+  # -- Syslog port number
+  syslogPort: 1514
+  # -- Syslog node port number
+  syslogNodePort: 31514
+
+  # -- Specify what kind of Kubernetes Service you want.
+  # See: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+  type: ClusterIP
+
+  # -- If you set service.externalTrafficPolicy to the value Local, kube-proxy only proxies proxy requests to local endpoints,
+  # and does not forward traffic to other nodes. This approach preserves the original source IP address. If there are no local endpoints,
+  # packets sent to the node are dropped, so you can rely on the correct source-ip in any packet processing rules
+  # you might apply a packet that make it through to the endpoint.
+  # See: https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-type-nodeport
+  externalTrafficPolicy: Cluster
+  # externalTrafficPolicy: Local
+
+  # -- Exposes the Service on a cluster IP
+  # See: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
+  clusterIP: ""
+
+  # service.topology -- enables a service to route traffic based upon the Node topology of the cluster
+  # ref: https://kubernetes.io/docs/concepts/services-networking/service-topology/#using-service-topology
+  # Kubernetes >= kubeVersion 1.18
+  topology: false
+
+  # service.topologyKeys -- A preference-order list of topology keys which implementations of services should use to preferentially sort endpoints
+  # when accessing this Service, it can not be used at the same time as externalTrafficPolicy=Local
+  # ref: https://kubernetes.io/docs/concepts/services-networking/service-topology/#using-service-topology
+  topologyKeys: []
+    # - "kubernetes.io/hostname"
+    # - "topology.kubernetes.io/zone"
+    # - "topology.kubernetes.io/region"
+    # - "*"
+
+  # service.annotations -- Annotations for Service resource
+  annotations: {}
+    # api.service.kubernetes.io/scheme: http
+    # service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    # service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+    # service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012
+    # service.beta.kubernetes.io/aws-load-balancer-backend-protocol: (https|http|ssl|tcp)
+    # service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443,8443"
+
+  # service.labels -- Additional labels for Service resource
+  labels: {}
+
+  # -- Only applies to Service Type: LoadBalancer LoadBalancer will get created with the IP specified in this field.
+  loadBalancerIP: ""
+
+  # -- If specified and supported by the platform,
+  # this will restrict traffic through the cloud-provider load-balancer will be restricted to the specified client IPs.
+  # ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/
+  loadBalancerSourceRanges: []
+
+# Create NetworkPolicy
+# ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+networkPolicy:
+  # networkPolicy.enabled -- Specifies whether a NetworkPolicy should be created
+  enabled: false
+  # networkPolicy.labels -- Additional labels for NetworkPolicy
+  labels: {}
+  # networkPolicy.annotations -- Annotations for NetworkPolicy
+  annotations: {}
+
+  # networkPolicy.ingress -- Ingress rules
+  ingress:
+    - {}
+    # - from:
+    #     - ipBlock:
+    #         cidr: 172.17.0.0/16
+    #         except:
+    #         - 172.17.1.0/24
+    #     - namespaceSelector:
+    #         matchLabels:
+    #           project: myproject
+    #     - podSelector:
+    #         matchLabels:
+    #           role: frontend
+    #     - podSelector:
+    #         matchLabels:
+    #           app: bookstore
+    #           role: api
+    #   ports:
+    #     - protocol: TCP
+    #       port: 6379
+
+  # networkPolicy.egress -- Egress rules
+  egress:
+    - {}
+    # - to:
+    #     - ipBlock:
+    #         cidr: 10.0.0.0/24
+    #   ports:
+    #     - protocol: TCP
+    #       port: 5978
+
+# --- Monitoring
+
+# ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#servicemonitor
+serviceMonitor:
+  # -- Specifies whether a ServiceMonitor should be created (prometheus operator CRDs required)
+  enabled: true
+  annotations: {}
+  labels: {}
+  namespace: monitoring
+  interval: 30s
+  scrapeTimeout: 30s
+  metricRelabelings: []
+  honorLabels: false
+  jobLabel: app.kubernetes.io/instance
+  path: /metrics
+
+#
+# --------------------------------------------------------------------------------------------------------------------------------------------- Extra
+#
+
+# -- Specifies init containers
+initContainers: []
+  # - name: fix-permissions
+  #   image: busybox
+  #   command: ["chown", "-R", "1042:1042", "/data"]
+  #   volumeMounts:
+  #     - name: data
+  #       mountPath: /data
+  #   securityContext:
+  #     runAsUser: 0
+
+# -- Specifies ephemeral containers
+ephemeralContainers: []
+
+# -- Specifies additional containers
+extraContainers: []
+  # - name: fix-permissions
+  #   image: busybox
+  #   command: ["chown", "-R", "1042:1042", "/data"]
+  #   volumeMounts:
+  #     - name: data
+  #       mountPath: /data
+  #   securityContext:
+  #     runAsUser: 0
+
+# -- Additional CLI arguments for application
+extraArgs: []
+  # - "--debug"
+  # - "--verbose"
+
+# -- Additional volumes for application
+extraVolumes: []
+
+# -- Additional mounts for application
+extraVolumeMounts: []
+  # - name: other-config
+  #   mountPath: /configs
+  #   readOnly: true
+  # - mountPath: /hugepages-2Mi
+  #   name: hugepage-2mi
+  # - mountPath: /hugepages-1Gi
+  #   name: hugepage-1gi
+
+# -- Additional environment variables
+extraEnvVars: []
+  # - name: TEST_VAR
+  #   value: 42
+  # - name: MY_NODE_NAME
+  #   valueFrom:
+  #     fieldRef:
+  #       fieldPath: spec.nodeName
+
+# -- Additional client configs
+extraClientConfigs: []
+  # - url: http://another.loki.target.example.com/loki/api/v1/push
+  #   tenant_id: another
+
+# -- Custom scrape configs together with the default ones in the configmap
+extraScrapeConfigs: []

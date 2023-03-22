@@ -1,0 +1,1821 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "affinity": {
+            "type": "object"
+        },
+        "alertingGroups": {
+            "type": "array"
+        },
+        "annotations": {
+            "type": "object"
+        },
+        "authEnabled": {
+            "type": "boolean"
+        },
+        "autoscaling": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "maxReplicas": {
+                    "type": "integer"
+                },
+                "minReplicas": {
+                    "type": "integer"
+                },
+                "targetCPUUtilizationPercentage": {
+                    "type": "integer"
+                }
+            }
+        },
+        "chunkStoreConfig": {
+            "type": "object",
+            "properties": {
+                "cacheLookupsOlderThan": {
+                    "type": "string"
+                },
+                "chunkCacheConfig": {
+                    "type": "object",
+                    "properties": {
+                        "background": {
+                            "type": "object",
+                            "properties": {
+                                "writebackBuffer": {
+                                    "type": "integer"
+                                },
+                                "writebackGoroutines": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "defaultValidity": {
+                            "type": "string"
+                        },
+                        "enableFifocache": {
+                            "type": "boolean"
+                        },
+                        "fifocache": {
+                            "type": "object",
+                            "properties": {
+                                "maxSizeBytes": {
+                                    "type": "string"
+                                },
+                                "maxSizeItems": {
+                                    "type": "integer"
+                                },
+                                "validity": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "memcached": {
+                            "type": "object",
+                            "properties": {
+                                "batchSize": {
+                                    "type": "integer"
+                                },
+                                "expiration": {
+                                    "type": "string"
+                                },
+                                "parallelism": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "memcachedClient": {
+                            "type": "object",
+                            "properties": {
+                                "consistentHash": {
+                                    "type": "boolean"
+                                },
+                                "host": {
+                                    "type": "string"
+                                },
+                                "maxIdleConns": {
+                                    "type": "integer"
+                                },
+                                "service": {
+                                    "type": "string"
+                                },
+                                "timeout": {
+                                    "type": "string"
+                                },
+                                "updateInterval": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "redis": {
+                            "type": "object",
+                            "properties": {
+                                "db": {
+                                    "type": "integer"
+                                },
+                                "endpoint": {
+                                    "type": "string"
+                                },
+                                "expiration": {
+                                    "type": "string"
+                                },
+                                "idleTimeout": {
+                                    "type": "string"
+                                },
+                                "masterName": {
+                                    "type": "string"
+                                },
+                                "maxConnectionAge": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "poolSize": {
+                                    "type": "integer"
+                                },
+                                "timeout": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "maxLookBackPeriod": {
+                    "type": "string"
+                },
+                "writeDedupeCacheConfig": {
+                    "type": "object",
+                    "properties": {
+                        "background": {
+                            "type": "object",
+                            "properties": {
+                                "writebackBuffer": {
+                                    "type": "integer"
+                                },
+                                "writebackGoroutines": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "defaultValidity": {
+                            "type": "string"
+                        },
+                        "enableFifocache": {
+                            "type": "boolean"
+                        },
+                        "fifocache": {
+                            "type": "object",
+                            "properties": {
+                                "maxSizeBytes": {
+                                    "type": "string"
+                                },
+                                "maxSizeItems": {
+                                    "type": "integer"
+                                },
+                                "validity": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "memcached": {
+                            "type": "object",
+                            "properties": {
+                                "batchSize": {
+                                    "type": "integer"
+                                },
+                                "expiration": {
+                                    "type": "string"
+                                },
+                                "parallelism": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "memcachedClient": {
+                            "type": "object",
+                            "properties": {
+                                "consistentHash": {
+                                    "type": "boolean"
+                                },
+                                "host": {
+                                    "type": "string"
+                                },
+                                "maxIdleConns": {
+                                    "type": "integer"
+                                },
+                                "service": {
+                                    "type": "string"
+                                },
+                                "timeout": {
+                                    "type": "string"
+                                },
+                                "updateInterval": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "redis": {
+                            "type": "object",
+                            "properties": {
+                                "db": {
+                                    "type": "integer"
+                                },
+                                "endpoint": {
+                                    "type": "string"
+                                },
+                                "expiration": {
+                                    "type": "string"
+                                },
+                                "idleTimeout": {
+                                    "type": "string"
+                                },
+                                "masterName": {
+                                    "type": "string"
+                                },
+                                "maxConnectionAge": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "poolSize": {
+                                    "type": "integer"
+                                },
+                                "timeout": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "compactor": {
+            "type": "object"
+        },
+        "deploymentType": {
+            "type": "string"
+        },
+        "distributor": {
+            "type": "object"
+        },
+        "dnsConfig": {
+            "type": "object"
+        },
+        "dnsPolicy": {
+            "type": "string"
+        },
+        "ephemeralContainers": {
+            "type": "array"
+        },
+        "extraArgs": {
+            "type": "array"
+        },
+        "extraContainers": {
+            "type": "array"
+        },
+        "extraEnvVars": {
+            "type": "array"
+        },
+        "extraVolumeMounts": {
+            "type": "array"
+        },
+        "extraVolumes": {
+            "type": "array"
+        },
+        "frontend": {
+            "type": "object",
+            "properties": {
+                "compressResponses": {
+                    "type": "boolean"
+                },
+                "downstreamUrl": {
+                    "type": "string"
+                },
+                "logQueriesLongerThan": {
+                    "type": "string"
+                },
+                "maxOutstandingPerTenant": {
+                    "type": "integer"
+                }
+            }
+        },
+        "frontendWorker": {
+            "type": "object"
+        },
+        "fullnameOverride": {
+            "type": "string"
+        },
+        "global": {
+            "type": "object",
+            "properties": {
+                "imagePullPolicy": {
+                    "type": "string"
+                },
+                "imagePullSecrets": {
+                    "type": "array"
+                }
+            }
+        },
+        "hostAliases": {
+            "type": "array"
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "repository": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                }
+            }
+        },
+        "ingester": {
+            "type": "object",
+            "properties": {
+                "chunkBlockSize": {
+                    "type": "integer"
+                },
+                "chunkEncoding": {
+                    "type": "string"
+                },
+                "chunkIdlePeriod": {
+                    "type": "string"
+                },
+                "chunkRetainPeriod": {
+                    "type": "string"
+                },
+                "chunkTargetSize": {
+                    "type": "integer"
+                },
+                "concurrentFlushes": {
+                    "type": "integer"
+                },
+                "flushCheckPeriod": {
+                    "type": "string"
+                },
+                "flushOpTimeout": {
+                    "type": "string"
+                },
+                "lifecycler": {
+                    "type": "object",
+                    "properties": {
+                        "finalSleep": {
+                            "type": "string"
+                        },
+                        "heartbeatPeriod": {
+                            "type": "string"
+                        },
+                        "interfaceNames": {
+                            "type": "array"
+                        },
+                        "joinAfter": {
+                            "type": "string"
+                        },
+                        "minReadyDuration": {
+                            "type": "string"
+                        },
+                        "numTokens": {
+                            "type": "integer"
+                        },
+                        "ring": {
+                            "type": "object",
+                            "properties": {
+                                "heartbeatTimeout": {
+                                    "type": "string"
+                                },
+                                "kvstore": {
+                                    "type": "object",
+                                    "properties": {
+                                        "consul": {
+                                            "type": "object",
+                                            "properties": {
+                                                "aclToken": {
+                                                    "type": "string"
+                                                },
+                                                "consistentReads": {
+                                                    "type": "boolean"
+                                                },
+                                                "host": {
+                                                    "type": "string"
+                                                },
+                                                "httpClientTimeout": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "etcd": {
+                                            "type": "object",
+                                            "properties": {
+                                                "dialTimeout": {
+                                                    "type": "string"
+                                                },
+                                                "endpoints": {
+                                                    "type": "array"
+                                                },
+                                                "maxRetries": {
+                                                    "type": "integer"
+                                                }
+                                            }
+                                        },
+                                        "memberlist": {
+                                            "type": "object",
+                                            "properties": {
+                                                "abortIfClusterJoinFails": {
+                                                    "type": "boolean"
+                                                },
+                                                "bindAddr": {
+                                                    "type": "string"
+                                                },
+                                                "bindPort": {
+                                                    "type": "integer"
+                                                },
+                                                "deadNodeReclaimTime": {
+                                                    "type": "string"
+                                                },
+                                                "gossipInterval": {
+                                                    "type": "string"
+                                                },
+                                                "gossipNodes": {
+                                                    "type": "integer"
+                                                },
+                                                "gossipToDeadNodesTime": {
+                                                    "type": "string"
+                                                },
+                                                "joinMembers": {
+                                                    "type": "string"
+                                                },
+                                                "leaveTimeout": {
+                                                    "type": "string"
+                                                },
+                                                "leftIngestersTimeout": {
+                                                    "type": "string"
+                                                },
+                                                "maxJoinBackoff": {
+                                                    "type": "string"
+                                                },
+                                                "maxJoinRetries": {
+                                                    "type": "integer"
+                                                },
+                                                "minJoinBackoff": {
+                                                    "type": "string"
+                                                },
+                                                "nodeName": {
+                                                    "type": "string"
+                                                },
+                                                "packetDialTimeout": {
+                                                    "type": "string"
+                                                },
+                                                "packetWriteTimeout": {
+                                                    "type": "string"
+                                                },
+                                                "pullPushInterval": {
+                                                    "type": "string"
+                                                },
+                                                "randomizeNodeName": {
+                                                    "type": "boolean"
+                                                },
+                                                "rejoinInterval": {
+                                                    "type": "string"
+                                                },
+                                                "retransmitFactor": {
+                                                    "type": "integer"
+                                                },
+                                                "streamTimeout": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "prefix": {
+                                            "type": "string"
+                                        },
+                                        "store": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "replicationFactor": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                },
+                "maxChunkAge": {
+                    "type": "string"
+                },
+                "maxReturnedStreamErrors": {
+                    "type": "integer"
+                },
+                "maxTransferRetries": {
+                    "type": "integer"
+                },
+                "queryStoreMaxLookBackPeriod": {
+                    "type": "string"
+                },
+                "syncMinUtilization": {
+                    "type": "integer"
+                },
+                "syncPeriod": {
+                    "type": "string"
+                }
+            }
+        },
+        "ingesterClient": {
+            "type": "object"
+        },
+        "ingress": {
+            "type": "object",
+            "properties": {
+                "annotations": {
+                    "type": "object"
+                },
+                "className": {
+                    "type": "string"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "hosts": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "host": {
+                                "type": "string"
+                            },
+                            "paths": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "labels": {
+                    "type": "object"
+                },
+                "tls": {
+                    "type": "array"
+                }
+            }
+        },
+        "initContainers": {
+            "type": "array"
+        },
+        "labels": {
+            "type": "object"
+        },
+        "limitsConfig": {
+            "type": "object",
+            "properties": {
+                "cardinalityLimit": {
+                    "type": "integer"
+                },
+                "creationGracePeriod": {
+                    "type": "string"
+                },
+                "enforceMetricName": {
+                    "type": "boolean"
+                },
+                "ingestionBurstSizeMb": {
+                    "type": "integer"
+                },
+                "ingestionRateMb": {
+                    "type": "number"
+                },
+                "ingestionRateStrategy": {
+                    "type": "string"
+                },
+                "maxChunksPerQuery": {
+                    "type": "integer"
+                },
+                "maxEntriesLimitPerQuery": {
+                    "type": "integer"
+                },
+                "maxGlobalStreamsPerUser": {
+                    "type": "integer"
+                },
+                "maxLabelNameLength": {
+                    "type": "integer"
+                },
+                "maxLabelNamesPerSeries": {
+                    "type": "integer"
+                },
+                "maxLabelValueLength": {
+                    "type": "integer"
+                },
+                "maxLineSize": {
+                    "type": "null"
+                },
+                "maxQueryLength": {
+                    "type": "string"
+                },
+                "maxQueryParallelism": {
+                    "type": "integer"
+                },
+                "maxStreamsMatchersPerQuery": {
+                    "type": "integer"
+                },
+                "maxStreamsPerUser": {
+                    "type": "integer"
+                },
+                "perTenantOverrideConfig": {
+                    "type": "string"
+                },
+                "perTenantOverridePeriod": {
+                    "type": "string"
+                },
+                "rejectOldSamples": {
+                    "type": "boolean"
+                },
+                "rejectOldSamplesMaxAge": {
+                    "type": "string"
+                }
+            }
+        },
+        "logLevel": {
+            "type": "string"
+        },
+        "nameOverride": {
+            "type": "string"
+        },
+        "networkPolicy": {
+            "type": "object",
+            "properties": {
+                "annotations": {
+                    "type": "object"
+                },
+                "egress": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "ingress": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "labels": {
+                    "type": "object"
+                }
+            }
+        },
+        "nodeSelector": {
+            "type": "object"
+        },
+        "pdb": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "persistence": {
+            "type": "object",
+            "properties": {
+                "accessModes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "annotations": {
+                    "type": "object"
+                },
+                "dataSource": {
+                    "type": "object"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "selector": {
+                    "type": "object"
+                },
+                "size": {
+                    "type": "string"
+                },
+                "storageClassName": {
+                    "type": "string"
+                },
+                "volumeMode": {
+                    "type": "string"
+                }
+            }
+        },
+        "podAnnotations": {
+            "type": "object"
+        },
+        "podLabels": {
+            "type": "object"
+        },
+        "podManagementPolicy": {
+            "type": "string"
+        },
+        "podSecurityContext": {
+            "type": "object",
+            "properties": {
+                "fsGroup": {
+                    "type": "integer"
+                },
+                "runAsNonRoot": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "podSecurityPolicy": {
+            "type": "object",
+            "properties": {
+                "annotations": {
+                    "type": "object"
+                },
+                "create": {
+                    "type": "boolean"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "postStartHook": {
+            "type": "object"
+        },
+        "preStopHook": {
+            "type": "object"
+        },
+        "priority": {
+            "type": "integer"
+        },
+        "priorityClassName": {
+            "type": "string"
+        },
+        "promtail": {
+            "type": "object",
+            "properties": {
+                "auditLog": {
+                    "type": "object",
+                    "properties": {
+                        "scrape": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "extraScrapeConfigs": {
+                    "type": "array"
+                },
+                "lokiUrl": {
+                    "type": "string"
+                },
+                "pods": {
+                    "type": "object",
+                    "properties": {
+                        "annotationPrefix": {
+                            "type": "string"
+                        },
+                        "dropDebug": {
+                            "type": "boolean"
+                        },
+                        "dropDeprecated": {
+                            "type": "boolean"
+                        },
+                        "excludeNamespaces": {
+                            "type": "array"
+                        },
+                        "extraPipelineStages": {
+                            "type": "array"
+                        },
+                        "parseGolang": {
+                            "type": "boolean"
+                        },
+                        "parseJava": {
+                            "type": "boolean"
+                        },
+                        "parseKnownApps": {
+                            "type": "boolean"
+                        },
+                        "parseLevels": {
+                            "type": "boolean"
+                        },
+                        "parseNginxAccessLog": {
+                            "type": "boolean"
+                        },
+                        "scrape": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "syslog": {
+                    "type": "object",
+                    "properties": {
+                        "listen": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "systemJournal": {
+                    "type": "object",
+                    "properties": {
+                        "scrape": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        },
+        "querier": {
+            "type": "object",
+            "properties": {
+                "engine": {
+                    "type": "object",
+                    "properties": {
+                        "maxLookBackPeriod": {
+                            "type": "string"
+                        },
+                        "timeout": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "extraQueryDelay": {
+                    "type": "string"
+                },
+                "queryIngestersWithin": {
+                    "type": "string"
+                },
+                "queryTimeout": {
+                    "type": "string"
+                },
+                "tailMaxDuration": {
+                    "type": "string"
+                }
+            }
+        },
+        "queryRange": {
+            "type": "object"
+        },
+        "rbac": {
+            "type": "object",
+            "properties": {
+                "annotations": {
+                    "type": "object"
+                },
+                "create": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "replicas": {
+            "type": "integer"
+        },
+        "resources": {
+            "type": "object"
+        },
+        "revisionHistoryLimit": {
+            "type": "integer"
+        },
+        "ruler": {
+            "type": "object"
+        },
+        "runtimeClassName": {
+            "type": "string"
+        },
+        "runtimeConfig": {
+            "type": "object",
+            "properties": {
+                "file": {
+                    "type": "string"
+                },
+                "period": {
+                    "type": "string"
+                }
+            }
+        },
+        "schedulerName": {
+            "type": "string"
+        },
+        "schemaConfig": {
+            "type": "object",
+            "properties": {
+                "configs": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "chunks": {
+                                "type": "object",
+                                "properties": {
+                                    "period": {
+                                        "type": "string"
+                                    },
+                                    "prefix": {
+                                        "type": "string"
+                                    },
+                                    "tags": {
+                                        "type": "object"
+                                    }
+                                }
+                            },
+                            "from": {
+                                "type": "string"
+                            },
+                            "index": {
+                                "type": "object",
+                                "properties": {
+                                    "period": {
+                                        "type": "string"
+                                    },
+                                    "prefix": {
+                                        "type": "string"
+                                    },
+                                    "tags": {
+                                        "type": "object"
+                                    }
+                                }
+                            },
+                            "objectStore": {
+                                "type": "string"
+                            },
+                            "rowShards": {
+                                "type": "integer"
+                            },
+                            "schema": {
+                                "type": "string"
+                            },
+                            "store": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "server": {
+            "type": "object",
+            "properties": {
+                "gracefulShutdownTimeout": {
+                    "type": "string"
+                },
+                "grpcMaxConcurrentStreams": {
+                    "type": "integer"
+                },
+                "grpcMaxRecvMsgSize": {
+                    "type": "integer"
+                },
+                "grpcMaxSendMsgSize": {
+                    "type": "integer"
+                },
+                "grpcPort": {
+                    "type": "integer"
+                },
+                "httpIdleTimeout": {
+                    "type": "string"
+                },
+                "httpPort": {
+                    "type": "integer"
+                },
+                "httpPrefix": {
+                    "type": "string"
+                },
+                "httpReadTimeout": {
+                    "type": "string"
+                },
+                "httpWriteTimeout": {
+                    "type": "string"
+                }
+            }
+        },
+        "service": {
+            "type": "object",
+            "properties": {
+                "annotations": {
+                    "type": "object"
+                },
+                "clusterIP": {
+                    "type": "string"
+                },
+                "externalTrafficPolicy": {
+                    "type": "string"
+                },
+                "grpcNodePort": {
+                    "type": "integer"
+                },
+                "grpcPort": {
+                    "type": "integer"
+                },
+                "httpNodePort": {
+                    "type": "integer"
+                },
+                "httpPort": {
+                    "type": "integer"
+                },
+                "labels": {
+                    "type": "object"
+                },
+                "loadBalancerIP": {
+                    "type": "string"
+                },
+                "loadBalancerSourceRanges": {
+                    "type": "array"
+                },
+                "topology": {
+                    "type": "boolean"
+                },
+                "topologyKeys": {
+                    "type": "array"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "serviceAccount": {
+            "type": "object",
+            "properties": {
+                "annotations": {
+                    "type": "object"
+                },
+                "create": {
+                    "type": "boolean"
+                },
+                "labels": {
+                    "type": "object"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "serviceMonitor": {
+            "type": "object",
+            "properties": {
+                "annotations": {
+                    "type": "object"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "honorLabels": {
+                    "type": "boolean"
+                },
+                "interval": {
+                    "type": "string"
+                },
+                "jobLabel": {
+                    "type": "string"
+                },
+                "labels": {
+                    "type": "object"
+                },
+                "metricRelabelings": {
+                    "type": "array"
+                },
+                "namespace": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "scrapeTimeout": {
+                    "type": "string"
+                }
+            }
+        },
+        "startupProbe": {
+            "type": "object"
+        },
+        "storageConfig": {
+            "type": "object",
+            "properties": {
+                "aws": {
+                    "type": "object",
+                    "properties": {
+                        "accessKeyId": {
+                            "type": "string"
+                        },
+                        "bucketnames": {
+                            "type": "string"
+                        },
+                        "dynamodb": {
+                            "type": "object",
+                            "properties": {
+                                "apiLimit": {
+                                    "type": "number"
+                                },
+                                "chunkGangSize": {
+                                    "type": "integer"
+                                },
+                                "chunkGetMaxParallelism": {
+                                    "type": "integer"
+                                },
+                                "dynamodbUrl": {
+                                    "type": "string"
+                                },
+                                "metrics": {
+                                    "type": "object",
+                                    "properties": {
+                                        "ignoreThrottleBelow": {
+                                            "type": "number"
+                                        },
+                                        "queueLengthQuery": {
+                                            "type": "string"
+                                        },
+                                        "readErrorQuery": {
+                                            "type": "string"
+                                        },
+                                        "readUsageQuery": {
+                                            "type": "string"
+                                        },
+                                        "scaleUpFactor": {
+                                            "type": "number"
+                                        },
+                                        "targetQueueLength": {
+                                            "type": "integer"
+                                        },
+                                        "url": {
+                                            "type": "string"
+                                        },
+                                        "writeThrottleQuery": {
+                                            "type": "string"
+                                        },
+                                        "writeUsageQuery": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "throttleLimit": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        "endpoint": {
+                            "type": "string"
+                        },
+                        "httpConfig": {
+                            "type": "object",
+                            "properties": {
+                                "idleConnTimeout": {
+                                    "type": "string"
+                                },
+                                "insecureSkipVerify": {
+                                    "type": "boolean"
+                                },
+                                "responseHeaderTimeout": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "insecure": {
+                            "type": "boolean"
+                        },
+                        "region": {
+                            "type": "string"
+                        },
+                        "s3": {
+                            "type": "string"
+                        },
+                        "s3forcepathstyle": {
+                            "type": "boolean"
+                        },
+                        "secretAccessKey": {
+                            "type": "string"
+                        },
+                        "sseEncryption": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "bigtable": {
+                    "type": "object",
+                    "properties": {
+                        "grpcClientConfig": {
+                            "type": "object",
+                            "properties": {
+                                "backoffConfig": {
+                                    "type": "object",
+                                    "properties": {
+                                        "maxPeriod": {
+                                            "type": "string"
+                                        },
+                                        "maxRetries": {
+                                            "type": "integer"
+                                        },
+                                        "minPeriod": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "backoffOnRatelimits": {
+                                    "type": "boolean"
+                                },
+                                "grpcCompression": {
+                                    "type": "string"
+                                },
+                                "maxRecvMsgSize": {
+                                    "type": "integer"
+                                },
+                                "maxSendMsgSize": {
+                                    "type": "integer"
+                                },
+                                "rateLimit": {
+                                    "type": "integer"
+                                },
+                                "rateLimitBurst": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "instance": {
+                            "type": "string"
+                        },
+                        "project": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "boltdb": {
+                    "type": "object",
+                    "properties": {
+                        "directory": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "boltdbShipper": {
+                    "type": "object"
+                },
+                "cassandra": {
+                    "type": "object",
+                    "properties": {
+                        "addresses": {
+                            "type": "string"
+                        },
+                        "auth": {
+                            "type": "boolean"
+                        },
+                        "caPath": {
+                            "type": "string"
+                        },
+                        "connectTimeout": {
+                            "type": "string"
+                        },
+                        "consistency": {
+                            "type": "string"
+                        },
+                        "disableInitialHostLookup": {
+                            "type": "boolean"
+                        },
+                        "hostVerification": {
+                            "type": "boolean"
+                        },
+                        "keyspace": {
+                            "type": "string"
+                        },
+                        "password": {
+                            "type": "string"
+                        },
+                        "port": {
+                            "type": "integer"
+                        },
+                        "replicationFactor": {
+                            "type": "integer"
+                        },
+                        "ssl": {
+                            "type": "boolean"
+                        },
+                        "timeout": {
+                            "type": "string"
+                        },
+                        "username": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "filesystem": {
+                    "type": "object",
+                    "properties": {
+                        "directory": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "gcs": {
+                    "type": "object",
+                    "properties": {
+                        "bucketName": {
+                            "type": "string"
+                        },
+                        "chunkBufferSize": {
+                            "type": "integer"
+                        },
+                        "requestTimeout": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "indexCacheValidity": {
+                    "type": "string"
+                },
+                "indexQueriesCacheConfig": {
+                    "type": "object",
+                    "properties": {
+                        "background": {
+                            "type": "object",
+                            "properties": {
+                                "writebackBuffer": {
+                                    "type": "integer"
+                                },
+                                "writebackGoroutines": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "defaultValidity": {
+                            "type": "string"
+                        },
+                        "enableFifocache": {
+                            "type": "boolean"
+                        },
+                        "fifocache": {
+                            "type": "object",
+                            "properties": {
+                                "maxSizeBytes": {
+                                    "type": "string"
+                                },
+                                "maxSizeItems": {
+                                    "type": "integer"
+                                },
+                                "validity": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "memcached": {
+                            "type": "object",
+                            "properties": {
+                                "batchSize": {
+                                    "type": "integer"
+                                },
+                                "expiration": {
+                                    "type": "string"
+                                },
+                                "parallelism": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "memcachedClient": {
+                            "type": "object",
+                            "properties": {
+                                "consistentHash": {
+                                    "type": "boolean"
+                                },
+                                "host": {
+                                    "type": "string"
+                                },
+                                "maxIdleConns": {
+                                    "type": "integer"
+                                },
+                                "service": {
+                                    "type": "string"
+                                },
+                                "timeout": {
+                                    "type": "string"
+                                },
+                                "updateInterval": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "redis": {
+                            "type": "object",
+                            "properties": {
+                                "db": {
+                                    "type": "integer"
+                                },
+                                "endpoint": {
+                                    "type": "string"
+                                },
+                                "expiration": {
+                                    "type": "string"
+                                },
+                                "idleTimeout": {
+                                    "type": "string"
+                                },
+                                "masterName": {
+                                    "type": "string"
+                                },
+                                "maxConnectionAge": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "poolSize": {
+                                    "type": "integer"
+                                },
+                                "timeout": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "maxChunkBatchSize": {
+                    "type": "integer"
+                },
+                "swift": {
+                    "type": "object",
+                    "properties": {
+                        "authUrl": {
+                            "type": "string"
+                        },
+                        "containerName": {
+                            "type": "string"
+                        },
+                        "domainId": {
+                            "type": "string"
+                        },
+                        "domainName": {
+                            "type": "string"
+                        },
+                        "password": {
+                            "type": "string"
+                        },
+                        "projectDomainId": {
+                            "type": "string"
+                        },
+                        "projectDomainName": {
+                            "type": "string"
+                        },
+                        "projectId": {
+                            "type": "string"
+                        },
+                        "projectName": {
+                            "type": "string"
+                        },
+                        "regionName": {
+                            "type": "string"
+                        },
+                        "userDomainId": {
+                            "type": "string"
+                        },
+                        "userDomainName": {
+                            "type": "string"
+                        },
+                        "userId": {
+                            "type": "string"
+                        },
+                        "username": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "tableManager": {
+            "type": "object",
+            "properties": {
+                "chunkTablesProvisioning": {
+                    "type": "object",
+                    "properties": {
+                        "enableInactiveThroughputOnDemandMode": {
+                            "type": "boolean"
+                        },
+                        "enableOndemandThroughputMode": {
+                            "type": "boolean"
+                        },
+                        "inactiveReadScale": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "inCooldown": {
+                                    "type": "integer"
+                                },
+                                "maxCapacity": {
+                                    "type": "integer"
+                                },
+                                "minCapacity": {
+                                    "type": "integer"
+                                },
+                                "outCooldown": {
+                                    "type": "integer"
+                                },
+                                "roleArn": {
+                                    "type": "string"
+                                },
+                                "target": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        "inactiveReadScaleLastn": {
+                            "type": "integer"
+                        },
+                        "inactiveReadThroughput": {
+                            "type": "integer"
+                        },
+                        "inactiveWriteScale": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "inCooldown": {
+                                    "type": "integer"
+                                },
+                                "maxCapacity": {
+                                    "type": "integer"
+                                },
+                                "minCapacity": {
+                                    "type": "integer"
+                                },
+                                "outCooldown": {
+                                    "type": "integer"
+                                },
+                                "roleArn": {
+                                    "type": "string"
+                                },
+                                "target": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        "inactiveWriteScaleLastn": {
+                            "type": "integer"
+                        },
+                        "inactiveWriteThroughput": {
+                            "type": "integer"
+                        },
+                        "provisionedReadThroughput": {
+                            "type": "integer"
+                        },
+                        "provisionedWriteThroughput": {
+                            "type": "integer"
+                        },
+                        "readScale": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "inCooldown": {
+                                    "type": "integer"
+                                },
+                                "maxCapacity": {
+                                    "type": "integer"
+                                },
+                                "minCapacity": {
+                                    "type": "integer"
+                                },
+                                "outCooldown": {
+                                    "type": "integer"
+                                },
+                                "roleArn": {
+                                    "type": "string"
+                                },
+                                "target": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        "writeScale": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "inCooldown": {
+                                    "type": "integer"
+                                },
+                                "maxCapacity": {
+                                    "type": "integer"
+                                },
+                                "minCapacity": {
+                                    "type": "integer"
+                                },
+                                "outCooldown": {
+                                    "type": "integer"
+                                },
+                                "roleArn": {
+                                    "type": "string"
+                                },
+                                "target": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    }
+                },
+                "creationGracePeriod": {
+                    "type": "string"
+                },
+                "indexTablesProvisioning": {
+                    "type": "object",
+                    "properties": {
+                        "enableInactiveThroughputOnDemandMode": {
+                            "type": "boolean"
+                        },
+                        "enableOndemandThroughputMode": {
+                            "type": "boolean"
+                        },
+                        "inactiveReadScale": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "inCooldown": {
+                                    "type": "integer"
+                                },
+                                "maxCapacity": {
+                                    "type": "integer"
+                                },
+                                "minCapacity": {
+                                    "type": "integer"
+                                },
+                                "outCooldown": {
+                                    "type": "integer"
+                                },
+                                "roleArn": {
+                                    "type": "string"
+                                },
+                                "target": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        "inactiveReadScaleLastn": {
+                            "type": "integer"
+                        },
+                        "inactiveReadThroughput": {
+                            "type": "integer"
+                        },
+                        "inactiveWriteScale": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "inCooldown": {
+                                    "type": "integer"
+                                },
+                                "maxCapacity": {
+                                    "type": "integer"
+                                },
+                                "minCapacity": {
+                                    "type": "integer"
+                                },
+                                "outCooldown": {
+                                    "type": "integer"
+                                },
+                                "roleArn": {
+                                    "type": "string"
+                                },
+                                "target": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        "inactiveWriteScaleLastn": {
+                            "type": "integer"
+                        },
+                        "inactiveWriteThroughput": {
+                            "type": "integer"
+                        },
+                        "provisionedReadThroughput": {
+                            "type": "integer"
+                        },
+                        "provisionedWriteThroughput": {
+                            "type": "integer"
+                        },
+                        "readScale": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "inCooldown": {
+                                    "type": "integer"
+                                },
+                                "maxCapacity": {
+                                    "type": "integer"
+                                },
+                                "minCapacity": {
+                                    "type": "integer"
+                                },
+                                "outCooldown": {
+                                    "type": "integer"
+                                },
+                                "roleArn": {
+                                    "type": "string"
+                                },
+                                "target": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        "writeScale": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "inCooldown": {
+                                    "type": "integer"
+                                },
+                                "maxCapacity": {
+                                    "type": "integer"
+                                },
+                                "minCapacity": {
+                                    "type": "integer"
+                                },
+                                "outCooldown": {
+                                    "type": "integer"
+                                },
+                                "roleArn": {
+                                    "type": "string"
+                                },
+                                "target": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    }
+                },
+                "pollInterval": {
+                    "type": "string"
+                },
+                "retentionDeletesEnabled": {
+                    "type": "boolean"
+                },
+                "retentionPeriod": {
+                    "type": "string"
+                },
+                "throughputUpdatesDisabled": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "target": {
+            "type": "string"
+        },
+        "terminationGracePeriodSeconds": {
+            "type": "integer"
+        },
+        "tolerations": {
+            "type": "array"
+        },
+        "topologySpreadConstraints": {
+            "type": "array"
+        },
+        "tracing": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "jaegerAgentHost": {
+                    "type": "string"
+                },
+                "jaegerAgentPort": {
+                    "type": "integer"
+                },
+                "jaegerServiceName": {
+                    "type": "string"
+                },
+                "jaegerTags": {
+                    "type": "string"
+                }
+            }
+        },
+        "updateStrategy": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

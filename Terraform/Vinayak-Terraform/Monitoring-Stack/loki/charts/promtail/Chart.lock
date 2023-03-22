@@ -1,0 +1,6 @@
+dependencies:
+- name: generate
+  repository: https://charts.kube-ops.io
+  version: 0.2.3
+digest: sha256:271f5ef0f89a67f81d64a639230199502a82aac5dbd92c3606a2f0c544e2ae39
+generated: "2021-04-15T21:47:19.263358004Z"

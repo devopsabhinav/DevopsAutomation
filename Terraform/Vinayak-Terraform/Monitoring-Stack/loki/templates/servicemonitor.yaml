@@ -1,0 +1,38 @@
+{{- if and .Values.serviceMonitor.enabled (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1/ServiceMonitor") -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  {{- with .Values.serviceMonitor.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "generate.labels" . | nindent 4 }}
+    {{- with .Values.serviceMonitor.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  name: {{ include "generate.fullname" . }}
+spec:
+  jobLabel: {{ .Values.serviceMonitor.jobLabel }}
+  endpoints:
+  {{- with .Values.serviceMonitor }}
+    - interval: {{ default "30s" .interval }}
+      scrapeTimeout: {{ default "30s" .scrapeTimeout }}
+      {{- if .honorLabels }}
+      honorLabels: {{ .honorLabels }}
+      {{- end }}
+      {{- with .metricRelabelings }}
+      metricRelabelings:
+        {{- toYaml .metricRelabelings | nindent 8 }}
+      {{- end }}
+      path: {{ .path }}
+      port: http
+      scheme: HTTP
+  {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "generate.selectorLabels" . | nindent 6 }}
+{{- end -}}

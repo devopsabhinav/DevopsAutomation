@@ -1,0 +1,31 @@
+annotations:
+  artifacthub.io/links: |
+    - name: Chart Source
+      url: https://gitlab.com/kube-ops/helm/apps/loki
+  category: LogManagement
+apiVersion: v2
+appVersion: 2.2.1
+dependencies:
+- name: generate
+  repository: https://charts.kube-ops.io
+  version: ~0.2.3
+- condition: promtail.enabled
+  name: promtail
+  repository: https://charts.kube-ops.io
+  version: ~1.5.1
+description: 'Loki: like Prometheus, but for logs.'
+home: https://grafana.com/loki
+icon: https://raw.githubusercontent.com/grafana/loki/master/docs/sources/logo.png
+keywords:
+- grafana
+- loki
+- logs
+maintainers:
+- email: anton.kulikov@protonmail.com
+  name: Anton Kulikov
+name: loki
+sources:
+- https://github.com/grafana/loki
+- https://gitlab.com/kube-ops/helm/apps/loki
+type: application
+version: 1.7.3

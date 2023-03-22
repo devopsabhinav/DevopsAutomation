@@ -1,0 +1,10 @@
+{{- if .Values.runtimeConfig.file }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "generate.labels" . | nindent 4 }}
+  name: {{ include "generate.fullname" . }}
+data:
+  runtime.yaml: {{ .Values.runtimeConfig.file | quote }}
+{{- end }}
