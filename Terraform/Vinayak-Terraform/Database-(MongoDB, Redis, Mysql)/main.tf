@@ -131,6 +131,11 @@ resource "helm_release" "redis" {
   }
 
   set {
+    name  = "architecture"
+    value = "replication"      #`standalone` or `replication`
+  }
+
+  set {
     name  = "master.count"
     value = "1"
   }
