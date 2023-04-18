@@ -1,0 +1,15 @@
+apiVersion: pincher.devtron.ai/v1alpha1
+kind: Hibernator
+metadata:
+  name: k8s-hibernator
+spec:
+  # pause: true
+  hibernate: true
+  selectors:
+  - inclusions:
+    - objectSelector:
+        name: ""
+        type: "deployment"
+      namespaceSelector:
+        name: "live-casino"
+  action: sleep
