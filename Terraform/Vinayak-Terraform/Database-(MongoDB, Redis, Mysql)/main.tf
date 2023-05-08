@@ -3,7 +3,7 @@
 
 resource "helm_release" "mongodb" {
   name       = "mongodb-dev-test"
-  repository = "https://charts.bitnami.com/bitnami"
+  repository = "oci://registry-1.docker.io/bitnamicharts"
   chart      = "mongodb"
 #   version    = "v13.9.2"
   namespace  = "dev"
@@ -65,10 +65,11 @@ resource "helm_release" "mongodb" {
 
 resource "helm_release" "mysql" {
   name       = "mysql-dev-test"
-  repository = "https://charts.bitnami.com/bitnami"
+  repository = "oci://registry-1.docker.io/bitnamicharts"
   chart      = "mysql"
 #   version    = "v9.7.0"
   namespace  = "dev"
+  create_namespace = true
 
   set {
     name  = "auth.rootPassword"
@@ -120,10 +121,11 @@ resource "helm_release" "mysql" {
 
 resource "helm_release" "redis" {
   name       = "redis-dev-test"
-  repository = "https://charts.bitnami.com/bitnami"
+  repository = "oci://registry-1.docker.io/bitnamicharts"
   chart      = "redis"
 #   version    = "v17.9.1"
   namespace  = "dev"
+  create_namespace = true
 
   set {
     name  = "auth.enabled"

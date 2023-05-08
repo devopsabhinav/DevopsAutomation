@@ -1,6 +1,7 @@
 //---------------
 #Loki Deploy in Cluster
 
+/*
 resource "helm_release" "loki" {
   name = "loki"
   chart = "./loki"
@@ -34,6 +35,8 @@ resource "helm_release" "loki" {
   }
 }
 
+*/
+
 //---------------
 #KPS Deploy in Cluster
 
@@ -41,7 +44,8 @@ resource "helm_release" "kps" {
   name = "kps"
   chart = "./kube-prometheus-stack"
   namespace  = "monitoring"
-  depends_on = [helm_release.loki]  
+  create_namespace = true  
+  #depends_on = [helm_release.loki]  
 
   set {
     name = "grafana.adminPassword"

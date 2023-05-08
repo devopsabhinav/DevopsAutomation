@@ -30,8 +30,8 @@ spec:
         volumeSize: 50Gi
         volumeType: gp3                           # optional, recommended to use instead of `provider`
     securityGroupSelector:
-      aws-ids: "sg-0f5da1dfa1669175d"
+      aws-ids: "sg-0e57425732219f37b"
     subnetSelector:
-      aws-ids: "subnet-03ade4859f845df0b,subnet-097a0d21fc496c65e,subnet-0e00363b25a7c5edf"
+      aws-ids: "subnet-0c953bdef202c731e,subnet-078bc770198548f70,subnet-044678ff9699471a4"
   # ttlSecondsAfterEmpty: 30                    # optional, but never scales down if not set
   ttlSecondsUntilExpired: 2592000

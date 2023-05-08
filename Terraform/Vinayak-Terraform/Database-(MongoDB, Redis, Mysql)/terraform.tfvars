@@ -1,3 +1,3 @@
-project_name = "vinayak"
-cluster_name = "vinayak-cluster"
+project_name = "final"
+cluster_name = "final-cluster"
 region = "ap-south-1"

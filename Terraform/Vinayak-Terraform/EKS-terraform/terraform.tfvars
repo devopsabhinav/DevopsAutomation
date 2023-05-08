@@ -1,9 +1,9 @@
 #Common
-project_name = "vinayak"
+project_name = "final"
 region       = "ap-south-1"
 
 #VPC Variables
-vpc_cidr_block = "10.0.0.0/16"
+vpc_cidr_block = "10.1.0.0/16"
 # vpc_name       = ""
 
 # #S3 Variables
@@ -14,13 +14,13 @@ vpc_cidr_block = "10.0.0.0/16"
 # #Security Group Variables
 
 # #Subnet Variables
-cidr_block_public_1a = "10.0.0.0/24"
-cidr_block_public_1b = "10.0.1.0/24"
-cidr_block_public_1c = "10.0.2.0/24"
+cidr_block_public_1a = "10.1.0.0/24"
+cidr_block_public_1b = "10.1.1.0/24"
+cidr_block_public_1c = "10.1.2.0/24"
 
-cidr_block_private_1a = "10.0.3.0/24"
-cidr_block_private_1b = "10.0.4.0/24"
-cidr_block_private_1c = "10.0.5.0/24"
+cidr_block_private_1a = "10.1.3.0/24"
+cidr_block_private_1b = "10.1.4.0/24"
+cidr_block_private_1c = "10.1.5.0/24"
 
 az_1a = "ap-south-1a"
 az_1b = "ap-south-1b"
@@ -34,7 +34,7 @@ az_1c = "ap-south-1c"
 # #IAM Policy Variables
 # #IAM Role Varibles
 # #EKS Variables
-eks_version = "1.24"
+eks_version = "1.25"
 
 # #EKS Addons Variables
 # #NodeGroup
